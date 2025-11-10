@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Виджет по тех. адаптации — стиль карточки</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --card-bg: #ffffff;
+      --accent: #c0392b;
+      --shadow: 0 6px 20px rgba(0,0,0,.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .widget-container {
+      width: min(760px, 92vw);
+    }
+
+    .tech-onboarding {
+      background-color: rgba(208, 2, 2, 0.15);
+      border: 1px solid rgba(208, 2, 2, 0.5);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .card-hero {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .widget-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--accent);
+      margin: 0;
+    }
+
+    .buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .action-button {
+      flex: 1 1 calc(33% - 8px);
+      min-width: 120px;
+      background-color: #fff;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .icon {
+      margin-right: 6px;
+      font-size: 16px;
+    }
+
+    .action-button:hover {
+      background-color: #ffeaea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,.15);
+    }
+
+    .illus {
+      width: 260px;
+      height: 170px;
+      border-radius: 26px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel {
+      display: none;
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .panel.is-open {
+      display: block;
+    }
+
+    .section { margin-bottom: 8px; }
+
+    .radio-row { display:flex; flex-direction:column; gap:6px; margin:6px 0; }
+
+    .address-row { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+
+    input[type="text"], input[type="password"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .btn {
+      padding: 10px 12px;
+      border: 2px solid var(--accent);
+      background: #fff;
+      color: var(--accent);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .hint {
+      color: #666;
+      font-size: 13px;
+    }
+
+    /* Новые стили для ссылки трека и крупной эмодзи в очках на главной панели */
+    .track-link { color: #1a0dab; text-decoration: underline; }
+
+    .illus .emoji-glasses {
+      font-size: 120px; /* крупный виджетний эмодзи */
+    }
+
+    @media (max-width: 900px) {
+      .card-hero { grid-template-columns: 1fr; }
+      .illus { width: 100%; height: 180px; }
+    }
+
+    @media (max-width: 600px) {
+      .action-button { min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="widget-container">
+  <div class="tech-onboarding" aria-label="Технический онбординг">
+    <div class="card-hero">
+      <div class="left-col">
+        <h3 class="widget-title" style="margin:0 0 6px 0;">Технический онбординг</h3>
+
+        <div class="buttons-row" aria-label="Кнопки действий">
+          <button class="action-button" id="changePasswordBtn" type="button" aria-label="Сменить пароль"><span class="icon">🔑</span>Сменить пароль</button>
+          <button class="action-button" aria-label="Удалёнка" id="remoteBtn" type="button"><span class="icon">🖥️</span>Удалёнка</button>
+          <button class="action-button" type="button" aria-label="Техника" id="techBtn" aria-controls="techPanel" aria-expanded="false"><span class="icon">💻</span>Техника</button>
+          <button class="action-button" type="button" aria-label="Доступы"><span class="icon">🔓</span>Доступы</button>
+          <button class="action-button" type="button" aria-label="Поддержка"><span class="icon">🎧</span>Поддержка</button>
+          <button class="action-button" type="button" aria-label="Базы знаний"><span class="icon">📚</span>Базы знаний</button>
+          <button class="action-button" type="button" aria-label="Настройка ПО на телефоне"><span class="icon">📱</span>Настройка ПО на телефоне</button>
+          <button class="action-button" type="button" aria-label="Сервисы"><span class="icon">👥</span>Сервисы</button>
+        </div>
+
+        <!-- Панель смены пароля -->
+        <div id="passwordPanel" class="panel" aria-live="polite" aria-label="Форма смены пароля">
+          <form id="passwordForm" autocomplete="new-password" onsubmit="return false;">
+            <div class="section">
+              <label>Текущий пароль
+                <input type="password" id="currentPassword" placeholder="Текущий пароль" required />
+              </label>
+            </div>
+            <div class="section">
+              <label>Новый пароль
+                <input type="password" id="newPassword" placeholder="Новый пароль" required />
+              </label>
+              <div class="hint" id="newPasswordHint"></div>
+            </div>
+            <div class="section">
+              <label>Действующий пароль
+                <input type="password" id="confirmPassword" placeholder="Действующий пароль" required />
+              </label>
+              <div class="hint" id="confirmHint"></div>
+            </div>
+            <button id="savePasswordBtn" class="btn" type="button" disabled>Сохранить пароль</button>
+            <div id="passwordStatus" class="panel" aria-live="polite" aria-label="Статус смены пароля" style="margin-top:8px;"></div>
+          </form>
+        </div>
+
+        <!-- Панель удалёнки -->
+        <div id="remoteStatus" class="panel" aria-live="polite" aria-label="Статус удалёнки">
+          Аутентификатор зарегистрирован ✅
+          <br/> Предоставлен доступ к VDI VMware ✅
+          <br/> При возникновении трудностей при входе — обратитесь в HelpDesk 📞
+        </div>
+
+        <!-- Панель Техника -->
+        <div id="techPanel" class="panel" aria-live="polite" aria-label="Настройки техники">
+          <!-- Меню статуса техники -->
+          <div style="margin-bottom: 8px;">
+            <label>Статус техники:
+              <select id="techStatus" aria-label="Статус техники">
+                <option value="not_yet" selected>пользователь еще не получил технику</option>
+                <option value="not_ordered">пользователь не заказана техника</option>
+                <option value="received">пользователь получил технику</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- Блок: текст для статуса "пользователь еще не получил технику" -->
+          <div id="techBodyNotYet" class="tech-content" style="display:none;">
+            <p>Отследить трек можно по ссылке</p>
+            <p>
+              <a href="https://track.example.com/track/XYZ" target="_blank" rel="noopener" class="track-link">https://track.example.com/track/XYZ</a> 🏃
+            </p>
+            <p>Курьер привезет технику по адресу: город Москва, Красная площадь, дом №1</p>
+          </div>
+
+          <!-- Блок: обычное наполнение (ОС и место получения) -->
+          <div id="techBodyNormal" class="tech-content" style="display:block;">
+            <div class="section">
+              <strong>Вам доступно получение корпоративной техники. Выберите ОС:</strong>
+              <div class="radio-row" role="group" aria-label="Операционные системы">
+                <label><input type="radio" name="tech-os" value="macos" checked> <span>🍎 macOS</span></label>
+                <label><input type="radio" name="tech-os" value="windows"> <span>🪟 Windows</span></label>
+              </div>
+            </div>
+
+            <div class="section" style="margin-top:8px;">
+              <strong>Способ получения:</strong>
+              <div class="radio-row" role="group" aria-label="Способ получения">
+                <label><input type="radio" name="tech-delivery" value="office" checked> <span>🏢 в офисе</span></label>
+                <label><input type="radio" name="tech-delivery" value="courier"> <span>🚚 курьером</span></label>
+                <label><input type="radio" name="tech-delivery" value="parcel"> <span>📦 в постамате или ПВЗ</span></label>
+              </div>
+            </div>
+
+            <!-- Адрес и заказ при курьере -->
+            <div id="addressSection" class="address-section" style="display:none;">
+              <div class="section">
+                <strong>Введите адрес доставки:</strong>
+                <div class="address-row">
+                  <input id="deliveryAddress" type="text" placeholder="Улица, дом, корпус, квартира" />
+                </div>
+              </div>
+              <button id="orderBtn" class="btn" type="button" disabled>Заказать технику</button>
+            </div>
+
+            <!-- Статус доставки после заказа -->
+            <div id="orderStatus" class="panel" aria-live="polite" aria-label="Статус доставки" style="margin-top:8px;">
+              Вы можете отслеживать статус доставки в этом виджете
+            </div>
+          </div>
+
+          <!-- Блок: техника получила (финальный текст) -->
+          <div id="techBodyReceived" class="tech-content" style="display:none;">
+            MacBook Air 13 выдан 25.12.2024. Если понадобится помощь или замена оборудования, обратитесь в Helpdesk 💻
+          </div>
+
+        </div>
+      </div>
+
+      <div class="illus" aria-label="Эмодзи в очках">
+        <span class="emoji-glasses" aria-label="Эмодзи в очках">😎</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Сменить пароль
+  const changePasswordBtn = document.getElementById('changePasswordBtn');
+  const passwordPanel = document.getElementById('passwordPanel');
+  const currentPassword = document.getElementById('currentPassword');
+  const newPassword = document.getElementById('newPassword');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const savePasswordBtn = document.getElementById('savePasswordBtn');
+  const newPasswordHint = document.getElementById('newPasswordHint');
+  const confirmHint = document.getElementById('confirmHint');
+  const passwordStatus = document.getElementById('passwordStatus');
+
+  function isValidNewPassword(pw) {
+    const onlyLetters = /^[A-Za-z]+$/.test(pw);
+    const min8 = pw.length >= 8;
+    const hasUpper = /[A-Z]/.test(pw);
+    return onlyLetters && min8 && hasUpper;
+  }
+
+  function validatePasswordForm() {
+    const pw = newPassword.value;
+    const confirm = confirmPassword.value;
+    const currentFilled = currentPassword.value.length > 0;
+
+    if (pw.length === 0) {
+      newPasswordHint.textContent = "";
+    } else if (!/^[A-Za-z]+$/.test(pw)) {
+      newPasswordHint.textContent = "Пароль должен состоять только из английских букв.";
+    } else if (pw.length < 8) {
+      newPasswordHint.textContent = "Пароль должен быть не менее 8 символов.";
+    } else if (!/[A-Z]/.test(pw)) {
+      newPasswordHint.textContent = "Пароль должен содержать хотя бы одну заглавную букву.";
+    } else {
+      newPasswordHint.textContent = "";
+    }
+
+    if (confirm && pw !== confirm) {
+      confirmHint.textContent = "Пароли не совпадают.";
+    } else {
+      confirmHint.textContent = "";
+    }
+
+    const valid = isValidNewPassword(pw) && confirm === pw && currentFilled;
+    savePasswordBtn.disabled = !valid;
+  }
+
+  if (changePasswordBtn && passwordPanel) {
+    changePasswordBtn.addEventListener('click', () => {
+      const isOpen = passwordPanel.classList.toggle('is-open');
+      passwordPanel.classList.toggle('is-open', isOpen);
+      changePasswordBtn.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) {
+        const firstInput = passwordPanel.querySelector('#currentPassword');
+        if (firstInput) firstInput.focus();
+      }
+    });
+  }
+
+  [currentPassword, newPassword, confirmPassword].forEach(el => {
+    if (el) el.addEventListener('input', validatePasswordForm);
+  });
+
+  if (savePasswordBtn) {
+    savePasswordBtn.addEventListener('click', () => {
+      passwordStatus.classList.add('is-open');
+      passwordStatus.textContent = "Пароль успешно сохранён.";
+      setTimeout(() => {
+        passwordPanel.classList.remove('is-open');
+        changePasswordBtn.focus();
+        if (currentPassword) currentPassword.value = "";
+        if (newPassword) newPassword.value = "";
+        if (confirmPassword) confirmPassword.value = "";
+        newPasswordHint.textContent = "";
+        confirmHint.textContent = "";
+        passwordStatus.classList.remove('is-open');
+        passwordStatus.textContent = "";
+        savePasswordBtn.disabled = true;
+      }, 1200);
+    });
+  }
+
+  // Удалёнка
+  const remoteBtn = document.getElementById('remoteBtn');
+  const remoteStatus = document.getElementById('remoteStatus');
+  if (remoteBtn && remoteStatus) {
+    remoteBtn.addEventListener('click', () => {
+      const isOpen = remoteStatus.classList.toggle('is-open');
+      remoteStatus.classList.toggle('is-open', isOpen);
+      remoteBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
+
+  // Техника: переключение статуса и контента
+  const techBtn = document.getElementById('techBtn');
+  const techPanel = document.getElementById('techPanel');
+  const techStatus = document.getElementById('techStatus');
+  const techBodyNotYet = document.getElementById('techBodyNotYet');
+  const techBodyNormal = document.getElementById('techBodyNormal');
+  const techBodyReceived = document.getElementById('techBodyReceived');
+  const addressSection = document.getElementById('addressSection');
+  const deliveryAddress = document.getElementById('deliveryAddress');
+  const orderBtn = document.getElementById('orderBtn');
+  const orderStatus = document.getElementById('orderStatus');
+
+  function updateTechBody() {
+    const status = techStatus ? techStatus.value : 'not_yet';
+    if (status === 'not_yet') {
+      // показать только текст про трек и адрес
+      if (techBodyNotYet) techBodyNotYet.style.display = 'block';
+      if (techBodyNormal) techBodyNormal.style.display = 'none';
+      if (techBodyReceived) techBodyReceived.style.display = 'none';
+      if (addressSection) addressSection.style.display = 'none';
+    } else if (status === 'not_ordered') {
+      // обычное наполнение (ОС и место получения)
+      if (techBodyNotYet) techBodyNotYet.style.display = 'none';
+      if (techBodyNormal) techBodyNormal.style.display = 'block';
+      if (techBodyReceived) techBodyReceived.style.display = 'none';
+      if (addressSection) addressSection.style.display = 'block';
+    } else if (status === 'received') {
+      // текст выдачи техники
+      if (techBodyNotYet) techBodyNotYet.style.display = 'none';
+      if (techBodyNormal) techBodyNormal.style.display = 'none';
+      if (techBodyReceived) techBodyReceived.style.display = 'block';
+      if (addressSection) addressSection.style.display = 'none';
+    }
+  }
+
+  if (techBtn && techPanel) {
+    techBtn.addEventListener('click', () => {
+      const isOpen = techPanel.classList.toggle('is-open');
+      techPanel.classList.toggle('is-open', isOpen);
+      techBtn.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) {
+        updateTechBody();
+      }
+    });
+  }
+
+  if (techStatus) {
+    techStatus.addEventListener('change', updateTechBody);
+  }
+
+  if (deliveryAddress) {
+    deliveryAddress.addEventListener('input', () => {
+      const val = deliveryAddress.value.trim();
+      if (orderBtn) orderBtn.disabled = val.length === 0;
+    });
+  }
+
+  // Инициализация
+  updateTechBody();
+});
+</script>
+
+</body>
+</html>
